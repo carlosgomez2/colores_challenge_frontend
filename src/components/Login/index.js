@@ -37,7 +37,7 @@ const Login = () => {
 
   return (
     <Container className="themed-container mt-4" fluid="lg">
-      <h1 className="mb-4">Welcome! please login.</h1>
+      <h1 className="mb-4">Welcome! please login to colors.</h1>
       <Form onSubmit={loginUser}>
         <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
           <Label for="exampleEmail" className="mr-sm-2">Email</Label>

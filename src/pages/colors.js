@@ -40,7 +40,7 @@ const Colors = ({colors}) => {
   return (
     <>
       <div className="container text-center">
-        <h2 className="my-4">Colores</h2>
+        <h1 className="my-4 display-4">Colores</h1>
         <div className="row">
           {displayColors}
           <ReactPaginate
