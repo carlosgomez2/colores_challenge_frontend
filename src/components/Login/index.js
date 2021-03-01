@@ -1,10 +1,7 @@
 import Router from 'next/router';
 import { Container, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
-const axios = require('axios');
-
 const Login = () => {
-
   const loginUser = async event => {
     event.preventDefault();
 
@@ -17,18 +14,25 @@ const Login = () => {
 
     console.log(endpoint)
 
-    axios.post(endpoint)
-      .then(res => {
-        console.log(res)
-        if(res.status == 201) {
-          localStorage.setItem('token', res.data.authentication_token)
-          Router.push('/colors')
-        } else {
-          throw new Error(res);
-        }
-      })
-      .then(json => console.dir(json))
-      .catch(err => console.error(err))
+    await fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "*/*",
+        "Content-Length": 0,
+        "Accept": "*/*",
+        "Connection": "keep-alive"
+      }
+    })
+    .then(res => {
+      console.log(res)
+      if(res.status == 201) {
+        console.log("Logged in")
+        // localStorage.setItem('token', res.data.authentication_token)
+        Router.push('/colors')
+      } else {
+        throw new Error(res);
+      }
+    })
   }
 
   return (
