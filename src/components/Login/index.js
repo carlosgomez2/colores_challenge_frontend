@@ -6,7 +6,7 @@ const axios = require('axios');
 const Login = () => {
 
   const loginUser = async event => {
-    event.preventDefault() // don't redirect the page
+    event.preventDefault();
 
     let user = {
       "email": event.target.email.value,
