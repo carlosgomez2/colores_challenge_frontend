@@ -2,7 +2,16 @@ import Router from 'next/router';
 import { Container, Card, Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
 const getColor = async (id) => {
-  const res = await fetch(`http://127.0.0.1:3001/colors/${id}`);
+  const res = await fetch(`http://127.0.0.1:3001/colors/${id}`, {
+    headers: {
+      "Content-Type": "*/*",
+      "Content-Length": 0,
+      "Accept": "*/*",
+      "Connection": "keep-alive",
+      "X-User-Email": localStorage.getItem('email'),
+      "X-User-Token": localStorage.getItem('token')
+    }
+  });
   const color = await res.json();
 
   return color;
@@ -26,13 +35,17 @@ const updateColor = async (event) => {
     method: 'PATCH',
     headers: {
       "Content-Type": "application/json",
-      "Accept": "application/json"
+      "Content-Length": 0,
+      "Accept": "application/json",
+      "Connection": "keep-alive",
+      "X-User-Email": localStorage.getItem('email'),
+      "X-User-Token": localStorage.getItem('token')
     },
     body: JSON.stringify(color)
   })
   .then(res => {
     console.log(res)
-    if(res.status == 200) {
+    if (res.status == 200) {
       alert("Color updated!")
     } else {
       throw new Error(res);

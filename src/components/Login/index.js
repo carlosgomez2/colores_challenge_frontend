@@ -25,12 +25,20 @@ const Login = () => {
     })
     .then(res => {
       console.log(res)
-      if(res.status == 201) {
-        console.log("Logged in")
-        // localStorage.setItem('token', res.data.authentication_token)
-        Router.push('/colors')
+      if (res.status == 201) {
+        return res.json();
       } else {
         throw new Error(res);
+      }
+    })
+    .then(data => {
+      console.log(data);
+      if (data) {
+        document.cookie = `token=${data.authentication_token}`
+        document.cookie = `email=${data.email}`
+        Router.push('/colors')
+      } else {
+        throw new Error(data);
       }
     })
   }
