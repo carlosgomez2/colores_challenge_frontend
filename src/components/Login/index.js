@@ -1,7 +1,13 @@
+import React, { useContext } from 'react';
 import Router from 'next/router';
 import { Container, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { UserContext } from '../../context/UserContext';
 
 const Login = () => {
+  const { value, setValue } = useContext(UserContext);
+
+  console.log(`el context, debe ser ${value}`);
+
   const loginUser = async event => {
     event.preventDefault();
 
@@ -9,7 +15,7 @@ const Login = () => {
       "email": event.target.email.value,
       "password": event.target.password.value
     }
-    console.log(user)
+
     let endpoint = `http://127.0.0.1:3001/users/sign_in?email=${user.email}&password=${user.password}`;
 
     console.log(endpoint)
@@ -25,21 +31,14 @@ const Login = () => {
     })
     .then(res => {
       console.log(res)
-      if (res.status == 201) {
-        return res.json();
-      } else {
-        throw new Error(res);
-      }
+      if (res.status != 201) throw new Error(res);
+      return res.json();
     })
     .then(data => {
-      console.log(data);
-      if (data) {
-        document.cookie = `token=${data.authentication_token}`
-        document.cookie = `email=${data.email}`
-        Router.push('/colors')
-      } else {
-        throw new Error(data);
-      }
+      if (!data) throw new Error(data);
+      console.log("configurando el value en el user")
+      setValue(data)
+      Router.push('/colors')
     })
   }
 
