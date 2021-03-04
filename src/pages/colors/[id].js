@@ -7,9 +7,7 @@ const getColor = async (id) => {
       "Content-Type": "*/*",
       "Content-Length": 0,
       "Accept": "*/*",
-      "Connection": "keep-alive",
-      "X-User-Email": localStorage.getItem('email'),
-      "X-User-Token": localStorage.getItem('token')
+      "Connection": "keep-alive"
     }
   });
   const color = await res.json();
@@ -37,9 +35,7 @@ const updateColor = async (event) => {
       "Content-Type": "application/json",
       "Content-Length": 0,
       "Accept": "application/json",
-      "Connection": "keep-alive",
-      "X-User-Email": localStorage.getItem('email'),
-      "X-User-Token": localStorage.getItem('token')
+      "Connection": "keep-alive"
     },
     body: JSON.stringify(color)
   })
@@ -54,7 +50,7 @@ const updateColor = async (event) => {
 }
 
 const Color = ({color}) => {
-  const handleDelete = async (event) => {
+  const deleteColor = async (event) => {
     event.preventDefault();
 
     let colorId = location.pathname.split("/")[2]
@@ -78,8 +74,12 @@ const Color = ({color}) => {
 
   return (
     <Container className="themed-container" fluid="md">
-      <h1 className="text-center mt-4">{color.name}</h1>
+      <h1 className="text-center mt-4">Colores</h1>
       <Card className="mt-4">
+        <div className="card-img-top color-preview d-flex justify-content-center align-items-center" style={{ height: "8rem", color: "white", backgroundColor: color.color, textShadow: "1px 1px 2px black" }}>
+          <h5>{color.name}</h5>
+        </div>
+
         <Form className="p-4" onSubmit={updateColor}>
           <Input type="hidden" name="colorId" id="colorId" value={color.id}></Input>
           <Row form>
@@ -112,10 +112,9 @@ const Color = ({color}) => {
             </Col>
           </Row>
 
-          <div className="mt-3">
-            <Button className="btn-danger mr-2" onClick={handleDelete}>Eliminar</Button>
-            <Button className="btn-success">Actualizar</Button>
-          </div>
+          <Button className="btn-primary mr-2 p-2" onClick={() => { alert("No implementado") }}>Crear color</Button>
+          <Button className="btn-danger mr-2 p-2" onClick={deleteColor}>Eliminar</Button>
+          <Button className="btn-success p-2">Actualizar</Button>
         </Form>
       </Card>
     </Container>
