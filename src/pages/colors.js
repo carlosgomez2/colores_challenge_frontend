@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import Link from 'next/link';
 import ReactPaginate from 'react-paginate';
 import { UserContext } from '../context/UserContext';
+import Head from '../components/Head';
 
 const Colors = () => {
   const { value, setValue } = useContext(UserContext);
@@ -21,11 +22,11 @@ const Colors = () => {
     })
     .then(res => {
       console.log(res.status);
-      if (res.status != 200) throw new Error(res);
+      if (res.status != 200) throw new Error(`Not expecting status code ${res.status}`);
       return res.json();
     })
     .then(colors => {
-      if (!colors) throw new Error(res);
+      if (!colors) throw new Error('Cannot get colors');
       setColors(colors);
       return setIsDataAvailable(true);
     })
@@ -35,7 +36,7 @@ const Colors = () => {
     return (
       <div className="col-sm-12 col-md-4" key={color.id}>
         <Link href={`/colors/${color.id}`}> 
-          <div className="card my-1 p-4 d-flex color-item" style={{ backgroundColor: color.color }}>
+          <div className="card my-1 p-4 d-flex color-item" style={{ color: "#F5F5F5", backgroundColor: color.color, textShadow: "1px 1px 2px black" }}>
             <div className="d-flex align-items-start">
               <h6>{color.year}</h6>
             </div>
@@ -65,7 +66,8 @@ const Colors = () => {
       (
         <>
           <div className="container text-center">
-            <h1 className="my-4 display-4">Colores</h1>
+            <Head title="Colors" />
+
             <div className="row">
               {displayColors}
               <ReactPaginate

@@ -38,6 +38,7 @@ const Login = () => {
       if (!data) throw new Error(data);
       console.log("configurando el value en el user")
       setValue(data)
+      localStorage.setItem('token', data.token)
       Router.push('/colors')
     })
   }

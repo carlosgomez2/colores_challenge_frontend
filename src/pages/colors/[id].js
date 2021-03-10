@@ -1,19 +1,7 @@
 import Router from 'next/router';
+import { useState, useEffect } from 'react';
 import { Container, Card, Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
-
-const getColor = async (id) => {
-  const res = await fetch(`http://127.0.0.1:3001/colors/${id}`, {
-    headers: {
-      "Content-Type": "*/*",
-      "Content-Length": 0,
-      "Accept": "*/*",
-      "Connection": "keep-alive"
-    }
-  });
-  const color = await res.json();
-
-  return color;
-};
+import Head from '../../components/Head';
 
 const updateColor = async (event) => {
   event.preventDefault();
@@ -32,6 +20,7 @@ const updateColor = async (event) => {
   await fetch(endpoint, {
     method: 'PATCH',
     headers: {
+      "Authorization": `Bearer ${localStorage.getItem('token')}`,
       "Content-Type": "application/json",
       "Content-Length": 0,
       "Accept": "application/json",
@@ -49,7 +38,31 @@ const updateColor = async (event) => {
   })
 }
 
-const Color = ({color}) => {
+const Color = () => {
+  const [color, setColor] = useState(null);
+  const [isDataAvailable, setIsDataAvailable] = useState(false);
+
+  useEffect(async () => {
+    let id = location.pathname.split("/")[2];
+    console.log(id)
+    await fetch(`http://127.0.0.1:3001/colors/${id}`, {
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    .then(res => {
+      console.log(res)
+      if (res.status != 200) throw new Error(`Not expecting status code ${res.status}`);
+      return res.json();
+    })
+    .then(color => {
+      console.log(color)
+      setColor(color);
+      return setIsDataAvailable(true);
+    })
+  }, []);
+
+
   const deleteColor = async (event) => {
     event.preventDefault();
 
@@ -58,6 +71,7 @@ const Color = ({color}) => {
     await fetch(endpoint, {
       method: 'DELETE',
       headers: {
+        "Authorization": `Bearer ${localStorage.getItem('token')}`,
         "Content-Type": "application/json",
         "Accept": "application/json"
       }
@@ -73,62 +87,70 @@ const Color = ({color}) => {
   }
 
   return (
-    <Container className="themed-container" fluid="md">
-      <h1 className="text-center mt-4">Colores</h1>
-      <Card className="mt-4">
-        <div className="card-img-top color-preview d-flex justify-content-center align-items-center" style={{ height: "8rem", color: "white", backgroundColor: color.color, textShadow: "1px 1px 2px black" }}>
-          <h5>{color.name}</h5>
+    (isDataAvailable) ?
+    (
+      <Container className="themed-container" fluid="md">
+        <Head title="Colors" />
+
+        <Card className="mt-4">
+          <div className="card-img-top color-preview d-flex justify-content-center align-items-center" style={{ height: "8rem", color: "#F5F5F5", backgroundColor: color.color, textShadow: "1px 1px 2px black" }}>
+            <h5>{color.name}</h5>
+          </div>
+
+          <Form className="p-4" onSubmit={updateColor}>
+            <Input type="hidden" name="colorId" id="colorId" value={color.id}></Input>
+            <Row form>
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="exampleName">Nombre</Label>
+                  <Input type="text" name="name" id="exampleName" placeholder={color.name} />
+                </FormGroup>
+              </Col>
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="exampleColor">Color</Label>
+                  <Input type="text" name="color" id="exampleColor" placeholder={color.color}/>
+                </FormGroup>
+              </Col>
+            </Row>
+
+            <Row form>
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="examplePantone">Pantone</Label>
+                  <Input type="text" name="pantone" id="examplePantone" placeholder={color.pantone} />
+                </FormGroup>
+              </Col>
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="exampleYear">Año</Label>
+                  <Input type="text" name="year" id="exampleYear" placeholder={color.year} />
+                </FormGroup>
+              </Col>
+            </Row>
+
+            <Button className="btn-primary mr-2 p-2" onClick={() => { alert("No implementado") }}>Crear color</Button>
+            <Button className="btn-danger mr-2 p-2" onClick={deleteColor}>Eliminar</Button>
+            <Button className="btn-success p-2">Actualizar</Button>
+          </Form>
+        </Card>
+      </Container>
+    ) :
+    (
+      <div className="container-fluid text-center mt-5">
+        <h3>Obteniendo datos...</h3>
+        <div className="spinner-grow mx-1 text-primary" role="status">
+          <span className="visually-hidden"></span>
         </div>
-
-        <Form className="p-4" onSubmit={updateColor}>
-          <Input type="hidden" name="colorId" id="colorId" value={color.id}></Input>
-          <Row form>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="exampleName">Nombre</Label>
-                <Input type="text" name="name" id="exampleName" placeholder={color.name} />
-              </FormGroup>
-            </Col>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="exampleColor">Color</Label>
-                <Input type="text" name="color" id="exampleColor" placeholder={color.color}/>
-              </FormGroup>
-            </Col>
-          </Row>
-
-          <Row form>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="examplePantone">Pantone</Label>
-                <Input type="text" name="pantone" id="examplePantone" placeholder={color.pantone} />
-              </FormGroup>
-            </Col>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="exampleYear">Año</Label>
-                <Input type="text" name="year" id="exampleYear" placeholder={color.year} />
-              </FormGroup>
-            </Col>
-          </Row>
-
-          <Button className="btn-primary mr-2 p-2" onClick={() => { alert("No implementado") }}>Crear color</Button>
-          <Button className="btn-danger mr-2 p-2" onClick={deleteColor}>Eliminar</Button>
-          <Button className="btn-success p-2">Actualizar</Button>
-        </Form>
-      </Card>
-    </Container>
+        <div className="spinner-grow mx-1 text-success" role="status">
+          <span className="visually-hidden"></span>
+        </div>
+        <div className="spinner-grow mx-1 text-warning" role="status">
+          <span className="visually-hidden"></span>
+        </div>
+      </div>
+    )
   )
 };
 
 export default Color;
-
-export const getServerSideProps = async ({params}) => {
-  const color = await getColor(params.id);
-
-  return {
-    props: {
-      color,
-    },
-  };
-};
