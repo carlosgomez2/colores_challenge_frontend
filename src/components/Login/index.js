@@ -6,8 +6,6 @@ import { UserContext } from '../../context/UserContext';
 const Login = () => {
   const { value, setValue } = useContext(UserContext);
 
-  console.log(`el context, debe ser ${value}`);
-
   const loginUser = async event => {
     event.preventDefault();
 
@@ -17,8 +15,6 @@ const Login = () => {
     }
 
     let endpoint = `http://127.0.0.1:3001/users/sign_in?email=${user.email}&password=${user.password}`;
-
-    console.log(endpoint)
 
     await fetch(endpoint, {
       method: 'POST',
@@ -30,13 +26,11 @@ const Login = () => {
       }
     })
     .then(res => {
-      console.log(res)
       if (res.status != 201) throw new Error(res);
       return res.json();
     })
     .then(data => {
       if (!data) throw new Error(data);
-      console.log("configurando el value en el user")
       setValue(data)
       localStorage.setItem('token', data.token)
       Router.push('/colors')

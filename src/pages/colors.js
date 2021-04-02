@@ -12,8 +12,6 @@ const Colors = () => {
   const colorsPerPage = 6;
   const pagesVisited = pageNumber * colorsPerPage;
 
-  console.log(`User value ${value}`);
-
   useEffect(async () => {
     await fetch('http://127.0.0.1:3001/colors.json', {
       headers: {
@@ -21,7 +19,6 @@ const Colors = () => {
       }
     })
     .then(res => {
-      console.log(res.status);
       if (res.status != 200) throw new Error(`Not expecting status code ${res.status}`);
       return res.json();
     })
