@@ -6,7 +6,7 @@ import Head from '../../components/Head';
 const updateColor = async (event) => {
   event.preventDefault();
 
-  let colorId = location.pathname.split("/")[2]
+  let colorId = location.pathname.split("/")[2];
 
   let color = { "color": {
     "name": event.target.name.value || event.target.name.placeholder,
@@ -14,7 +14,6 @@ const updateColor = async (event) => {
     "pantone": event.target.pantone.value || event.target.pantone.placeholder,
     "year": event.target.year.value || event.target.year.placeholder
   }}
-  console.log(color);
 
   let endpoint = `http://127.0.0.1:3001/colors/${colorId}`;
   await fetch(endpoint, {
@@ -29,9 +28,8 @@ const updateColor = async (event) => {
     body: JSON.stringify(color)
   })
   .then(res => {
-    console.log(res)
     if (res.status == 200) {
-      alert("Color updated!")
+      alert("Color updated!");
     } else {
       throw new Error(res);
     }
@@ -44,19 +42,16 @@ const Color = () => {
 
   useEffect(async () => {
     let id = location.pathname.split("/")[2];
-    console.log(id)
     await fetch(`http://127.0.0.1:3001/colors/${id}`, {
       headers: {
         "Authorization": `Bearer ${localStorage.getItem('token')}`
       }
     })
     .then(res => {
-      console.log(res)
       if (res.status != 200) throw new Error(`Not expecting status code ${res.status}`);
       return res.json();
     })
     .then(color => {
-      console.log(color)
       setColor(color);
       return setIsDataAvailable(true);
     })
@@ -77,9 +72,8 @@ const Color = () => {
       }
     })
     .then(res => {
-      console.log(res)
       if(res.status == 204) {
-        Router.push('/colors')
+        Router.push('/colors');
       } else {
         throw new Error(res);
       }
@@ -129,7 +123,7 @@ const Color = () => {
               </Col>
             </Row>
 
-            <Button className="btn-primary mr-2 p-2" onClick={() => { alert("No implementado") }}>Crear color</Button>
+            <Button className="btn-primary mr-2 p-2" onClick={() => { Router.push('create_color') }}>Crear color</Button>
             <Button className="btn-danger mr-2 p-2" onClick={deleteColor}>Eliminar</Button>
             <Button className="btn-success p-2">Actualizar</Button>
           </Form>
