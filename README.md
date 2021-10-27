@@ -1,34 +1,45 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Colores challenge
 
-## Getting Started
+## Colores challenge Backend
 
-First, run the development server:
+**Tecnologías utilizadas:**
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+- Ruby on Rails API 6.0.3.5
+- Ruby v2.6.5
+- SQLite
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Instrucciones de uso**
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+- Descarga el proyecto y corre `$ bundle` para instalar todas las dependencias de RoR
+- Para configurar la base de datos corre el comando `$ rails db:create db:migrate db:seed` el cual creará la base, generará las migraciones correspondientes y almacenará unos datos de prueba en la base para que puedas correr el proyecto
+- Corre el comando `$ rails s -p 3001` para encender Rails y exponer el puerto *3001* para que se conecte el SPA
+- Mantén la terminal abierta
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+**NOTA:** al configurar la base de datos se crearon 2 usuarios:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- Admin user  - email: *q@mail.com*, password: *secret*
+- Normal user - email: *u@mail.com*, password: *secret*
 
-## Learn More
+## Colores challenge Frontend
 
-To learn more about Next.js, take a look at the following resources:
+**Tecnologías utilizadas:**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Node v12.18.4
+- React v17.0.1
+- Next v10.0.7
+- Bootstrap v4.6.0
+- HTML5, CSS, JS
+- reactstrap
+- react-paginate
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+**Instrucciones de uso**
 
-## Deploy on Vercel
+- Descarga el proyecto y corre `$ yarn` para instalar todas las dependencias de Next
+- Corre el comando `yarn dev` para encender Next y exponer el puerto *3000*
+- Mantén la terminal abierta
+- Abre el navegador y ve a la ruta *localhost:3000* para ir al login de la app
+- Ingresa las credenciales y seras redireccionado al endpoint /colores  ahí se listaran todos los colores generados en la configuración de la base de datos
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**NOTA:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Se incluye la colección de endpoints disponibles para Postman en la carpeta */postman* de cada proyecto
